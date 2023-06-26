@@ -1,6 +1,6 @@
 const Streamer = require("../model/Streamer");
 
-const getStreamers = async (req, res) => {
+const getStreamers = async (req, res, next) => {
   try {
     const streamers = await Streamer.find();
     res.status(200).json(streamers);
@@ -9,7 +9,7 @@ const getStreamers = async (req, res) => {
   }
 };
 
-const getStreamer = async (req, res) => {
+const getStreamer = async (req, res, next) => {
   const streamerId = req?.params?.streamerId;
   if (!streamerId) {
     return res.status(400).json({ message: "Streamer id is required" });
@@ -17,7 +17,7 @@ const getStreamer = async (req, res) => {
   try {
     const streamer = await Streamer.findOne({ _id: streamerId }).exec();
     if (!streamer) {
-      return res.status(204).json({ message: "No streamer for that id" });
+      return res.status(404).json({ message: "No streamer for that id" });
     }
     res.status(200).json(streamer);
   } catch (error) {
@@ -51,7 +51,7 @@ const addStreamer = async (req, res, next) => {
   }
 };
 
-const markStreamer = async (req, res) => {
+const markStreamer = async (req, res, next) => {
   const streamerId = req?.params?.streamerId;
   const vote = req?.body;
   if (!streamerId || !vote?.type) {
@@ -62,8 +62,9 @@ const markStreamer = async (req, res) => {
 
   try {
     const streamer = await Streamer.findOne({ _id: streamerId }).exec();
+    console.log(streamer);
     if (!streamer) {
-      return res.status(204).json({ message: "No streamer for that id" });
+      return res.status(404).json({ message: "No streamer for that id" });
     }
     switch (vote.type) {
       case "upvote":
