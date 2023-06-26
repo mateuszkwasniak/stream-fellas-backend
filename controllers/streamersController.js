@@ -36,6 +36,14 @@ const addStreamer = async (req, res, next) => {
     });
   }
   try {
+    const existingStreamer = await Streamer.findOne({
+      name: streamer.name.toUpperCase(),
+    });
+    if (existingStreamer) {
+      return res
+        .status(403)
+        .json({ message: "Streamer with such name already exists" });
+    }
     const newStreamer = new Streamer({ ...streamer, upvotes: 0, downvotes: 0 });
     await newStreamer.save();
     const allStreamers = await Streamer.find();
