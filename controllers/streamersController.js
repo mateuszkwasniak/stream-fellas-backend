@@ -5,8 +5,7 @@ const getStreamers = async (req, res) => {
     const streamers = await Streamer.find();
     res.status(200).json(streamers);
   } catch (error) {
-    console.log(error);
-    next(new Error());
+    next(error);
   }
 };
 
@@ -22,8 +21,7 @@ const getStreamer = async (req, res) => {
     }
     res.status(200).json(streamer);
   } catch (error) {
-    console.log(error);
-    next(new Error());
+    next(error);
   }
 };
 
@@ -49,7 +47,6 @@ const addStreamer = async (req, res, next) => {
     const allStreamers = await Streamer.find();
     res.status(201).json(allStreamers);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -83,7 +80,6 @@ const markStreamer = async (req, res) => {
 
     res.status(200).json(streamer);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
