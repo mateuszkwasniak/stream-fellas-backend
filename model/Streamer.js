@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const platforms = require("../config/availablePlatforms");
+const platforms = require("../utils/availablePlatforms");
 
 const streamerSchema = new Schema({
   name: { type: String, required: true },

@@ -1,4 +1,5 @@
 const Streamer = require("../model/Streamer");
+const validateStreamerData = require("../utils/validateStreamerData");
 
 const getStreamers = async (req, res, next) => {
   try {
@@ -33,15 +34,24 @@ const addStreamer = async (req, res, next) => {
         "Incomplete streamer's data - name, description and streaming platform are required",
     });
   }
+
+  if (!validateStreamerData(streamer)) {
+    return res.status(400).json({
+      message: "Invalid streamer's data",
+    });
+  }
+
   try {
     const existingStreamer = await Streamer.findOne({
-      name: streamer.name.toUpperCase(),
-    });
+      name: { $regex: "^" + streamer.name + "$", $options: "i" },
+    }).exec();
+
     if (existingStreamer) {
       return res
         .status(403)
         .json({ message: "Streamer with such name already exists" });
     }
+
     const newStreamer = new Streamer({ ...streamer, upvotes: 0, downvotes: 0 });
     await newStreamer.save();
     const allStreamers = await Streamer.find();
