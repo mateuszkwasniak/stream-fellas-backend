@@ -79,16 +79,29 @@ const markStreamer = async (req, res, next) => {
     switch (vote.type) {
       case "upvote":
         streamer.upvotes++;
-        await streamer.save();
         break;
       case "downvote":
         streamer.downvotes++;
-        await streamer.save();
+        break;
+      case "toggleNeg":
+        streamer.upvotes--;
+        streamer.downvotes++;
+        break;
+      case "togglePos":
+        streamer.upvotes++;
+        streamer.downvotes--;
+        break;
+      case "resetDownvote":
+        streamer.downvotes--;
+        break;
+      case "resetUpvote":
+        streamer.upvotes--;
         break;
       default:
         return res.status(400).json({ message: "Unknown vote type" });
     }
 
+    await streamer.save();
     res.status(200).json(streamer);
   } catch (error) {
     next(error);
