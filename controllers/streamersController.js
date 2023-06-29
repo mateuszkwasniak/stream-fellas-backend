@@ -3,7 +3,7 @@ const validateStreamerData = require("../utils/validateStreamerData");
 
 const getStreamers = async (req, res, next) => {
   try {
-    const streamers = await Streamer.find();
+    const streamers = await Streamer.find().sort({ upvotes: -1, name: 1 });
     res.status(200).json(streamers);
   } catch (error) {
     next(error);
@@ -72,7 +72,6 @@ const markStreamer = async (req, res, next) => {
 
   try {
     const streamer = await Streamer.findOne({ _id: streamerId }).exec();
-    console.log(streamer);
     if (!streamer) {
       return res.status(404).json({ message: "No streamer for that id" });
     }
