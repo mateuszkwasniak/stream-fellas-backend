@@ -1,8 +1,5 @@
-const allowedOrigins = [
-  "https://www.frontend.com",
-  "http://localhost:5173",
-  "http://localhost:3500",
-];
+//add your frontend origin to the allowedOrigins array:
+const allowedOrigins = ["http://localhost:5173", "http://localhost:3500"];
 
 const corsOptions = {
   origin: (origin, callback) => {
